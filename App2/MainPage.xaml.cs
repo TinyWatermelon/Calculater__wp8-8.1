@@ -19,7 +19,7 @@ namespace App2
 {
     public sealed partial class MainPage : Page
     {
-        int i = 0;
+        bool i = true;
         ObservableCollection<Item> OldItem = new ObservableCollection<Item>();
         public MainPage()
         {
@@ -138,7 +138,7 @@ namespace App2
         {
             if (TextBlock1 != null)
             { 
-                this.DataContext = Histroy.Record(i+1, TextBlock1.Text, TextBlock2.Text, OldItem);
+                this.DataContext = Histroy.Record(i, TextBlock1.Text, TextBlock2.Text, OldItem);
             }
             TextBlock1.Text = "";
             TextBlock2.Text = "0";
@@ -193,22 +193,23 @@ namespace App2
                 NotifyChange();
             }
         }
-        private string _color = "Black";
+        private string _color = string.Empty;
         public string Color
         {
             get { return _color; }
             set
             {
                 _color = value;
+                //NotifyChange();
             }
         }
     }
     public static class Histroy
     {
-        public static ObservableCollection<Item> Record(int i, string str1,string str2, ObservableCollection<Item> Collection)
+        public static ObservableCollection<Item> Record(bool i, string str1,string str2, ObservableCollection<Item> Collection)
         {
-            //var Collection = new ObservableCollection<Item>();
-            if (i % 2 == 0)
+            Collection=(ObservableCollection<Item>)Collection.Reverse<Item>();
+            if (i)
             {
                 Collection.Add(new Item
                 {
@@ -217,6 +218,7 @@ namespace App2
                     Color = "Gray"
                 }
                     );
+                i = false;
             }
             else
             {
@@ -227,8 +229,9 @@ namespace App2
                     Color = "Black"
                 }
                     );
+                i = true;
             }
-                
+            Collection=(ObservableCollection<Item>)Collection.Reverse<Item>();
             return Collection;
         }
     }
